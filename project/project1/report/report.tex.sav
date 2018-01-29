@@ -1,0 +1,81 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage{ctex}
+\usepackage{amsmath,amscd,amsbsy,amssymb,latexsym,url,bm,amsthm}
+\usepackage{epsfig,graphicx,subfigure}
+\usepackage{enumitem,balance}
+\usepackage{wrapfig}
+\usepackage{mathrsfs, euscript}
+\usepackage[usenames]{xcolor}
+\usepackage{hyperref}
+\usepackage{setspace}
+\usepackage[vlined,ruled,commentsnumbered,linesnumbered]{algorithm2e}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{exercise}{Exercise}[section]
+\newtheorem*{solution}{Solution}
+\theoremstyle{definition}
+
+
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+
+\newcommand{\postscript}[2]
+ {\setlength{\epsfxsize}{#2\hsize}
+  \centerline{\epsfbox{#1}}}
+
+\renewcommand{\baselinestretch}{1.0}
+
+\setlength{\oddsidemargin}{-0.365in}
+\setlength{\evensidemargin}{-0.365in}
+\setlength{\topmargin}{-0.3in}
+\setlength{\headheight}{0in}
+\setlength{\headsep}{0in}
+\setlength{\textheight}{10.1in}
+\setlength{\textwidth}{7in}
+\makeatletter \renewenvironment{proof}[1][Proof] {\par\pushQED{\qed}\normalfont\topsep6\p@\@plus6\p@\relax\trivlist\item[\hskip\labelsep\bfseries#1\@addpunct{.}]\ignorespaces}{\popQED\endtrivlist\@endpefalse} \makeatother
+\makeatletter
+\renewenvironment{solution}[1][Solution] {\par\pushQED{\qed}\normalfont\topsep6\p@\@plus6\p@\relax\trivlist\item[\hskip\labelsep\bfseries#1\@addpunct{.}]\ignorespaces}{\popQED\endtrivlist\@endpefalse} \makeatother
+
+
+%============================BEGIN OF THE DOCUMENT====================================
+\begin{document}
+\begin{spacing}{1.5}
+%==========================BEGIN OF THE TITLE===================================
+\begin{center}
+\begin{spacing}{3.0}
+\begin{tabular}{c c}
+\multicolumn{2}{c}{\Huge{Report for Project-1 \hspace{2cm}}} \\
+\hline
+\large{Author: Li Minchao} & \large {ID: 515030910361}\\
+\end{tabular}
+\end{spacing}
+\end{center}
+%==========================END OF THE TITLE=====================================
+%=========================BEGIN OF THE REPORT===================================
+%==================BEGIN OF SECTION 1======================================
+\section{Synopsis of the project}\par
+\subsection{Demand of the project}
+To achieve some bit-level function using C grammar\par
+The limitation is to complete each function skeleton using only straightline code for the integer puzzles and a limited number of C arithmetic and logical operators.\par
+The operator set for each function is given, and the max op is anticipated\par
+\subsection{Purpose of the project}
+To become more familiar with bit-level representations of integers and floating numbers.\par
+To work my own way through working it and make the algorithm as simple as possible.\par
+%===================END OF SECTION 1=======================================
+%==================BEGIN OF SECTION 2======================================
+\section{Environment of the project}
+OS:Linux Ubuntu Kylin 16.04\par
+Compile under gcc v5.4.0\par
+%===================END OF SECTION 2=======================================
+%==================BEGIN OF SECTION 3======================================
+\section{Implemetation }
+%===================END OF SECTION 3=======================================
+%==========================END OF THE REPORT====================================
+\end{spacing}
+\end{document}
+%============================END OF THE DOCUMENT======================================

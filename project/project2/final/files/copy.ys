@@ -1,0 +1,61 @@
+# ID information                             #
+#                                            #
+# Leader:        Li Minchao     515030910361 #
+# Group member:  Wang Chenyang  515030910383 #
+#                Qiang Zhiwen   515030910367 #
+
+# contact email                              #
+# marshallee413lmc@gmail.com                 #
+
+.pos 0 
+init:	irmovl Stack, %esp 
+	irmovl Stack, %ebp 
+	jmp Main 
+ 
+	.align 4 
+# Source block 
+src: 
+	.long 0x00a 
+	.long 0x0b0 
+	.long 0xc00 
+# Destination block 
+dest: 
+	.long 0x111 
+	.long 0x222 
+	.long 0x333 
+ 
+Main:	irmovl $3,%eax 
+	pushl %eax 
+	irmovl dest,%edx 
+	pushl %edx 
+	irmovl src,%ecx 
+	pushl %ecx 
+	call Copy 
+	halt 
+ 
+Copy:	pushl %ebp 
+	rrmovl %esp,%ebp 
+	mrmovl 8(%ebp),%ecx	#ecx = src 
+	mrmovl 12(%ebp),%ebx	#ebx = dest 
+	mrmovl 16(%ebp),%edx	#edx = len 
+	irmovl $0,%eax		#result = 0 
+	andl %edx,%edx 
+	je End 
+Loop:	mrmovl (%ecx),%esi	#get *src 
+	rmmovl %esi,(%ebx)	#scr = dest 
+	xorl %esi,%eax		#result ^= src 
+	irmovl $4,%edi		#set %edi to 4 
+	addl %edi,%ecx		#+4 
+	addl %edi,%ebx		#+4 
+	irmovl $-1,%edi	        #set %edi to -1  
+	addl %edi,%edx          #len - 1 
+	jne    Loop             #Stop when 0 
+ 
+ 
+End:	popl %ebp 
+	rrmovl %ebp, %esp
+	popl %ebp
+	ret 
+ 
+	.pos 0x100 
+Stack:

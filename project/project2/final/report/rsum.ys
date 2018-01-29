@@ -1,0 +1,53 @@
+# ID information                             #
+#                                            #
+# Leader:        Li Minchao     515030910361 #
+# Group member:  Wang Chenyang  515030910383 #
+#                Qiang Zhiwen   515030910367 #
+
+# Execution begins at address 0	 		
+		.pos 0
+init:		irmovl Stack, %esp
+		irmovl Stack, %ebp
+		jmp Main
+		
+		
+# Sample linked list			
+		.align 4
+ele1:		.long 0x00a
+		.long ele2
+ele2:		.long 0x0b0
+		.long ele3
+ele3:		.long 0xc00
+		.long 0
+
+Main: 		irmovl ele1, %edx
+		pushl %ebp
+		rrmovl %esp, %ebp
+		pushl %edx
+		call rsum_list
+		rrmovl %ebp, %esp
+		popl %ebp
+		halt
+
+# rsum_list - Recursive version of sum_list
+# int rsum_list(list_ptr ls)				
+rsum_list:	pushl   	%ebp
+		rrmovl    	%esp,%ebp
+		mrmovl    	0x8(%ebp),%edx			# ls
+		xorl    	%eax,%eax			# val=0
+		pushl   	%ebx				# save %ebx
+		andl   		%edx,%edx			# ls==0?
+		je     		End				# if so, gotoEnd
+		mrmovl    	(%edx),%ebx			# ls->val
+		mrmovl		0x4(%edx),%ecx			# ls->next
+		pushl  		%ecx				# push ls->next as the first parameter
+		call 		rsum_list			# call rsum_list by recursion
+		addl		%ebx,%eax			# val+=ls->val
+End:		mrmovl    	0xfffffffc(%ebp),%ebx		# restore %ebx
+		rrmovl 		%ebp, %esp
+		popl		%ebp  
+		ret    
+
+ 
+		.pos	0x100	
+Stack:

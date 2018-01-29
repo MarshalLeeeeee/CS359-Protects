@@ -1,0 +1,235 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage{ctex}
+\usepackage{amsmath,amscd,amsbsy,amssymb,latexsym,url,bm,amsthm}
+\usepackage{epsfig,graphicx,subfigure}
+\usepackage{enumitem,balance}
+\usepackage{wrapfig}
+\usepackage{mathrsfs, euscript}
+\usepackage[usenames]{xcolor}
+\usepackage{hyperref}
+\usepackage{setspace}
+\usepackage[vlined,ruled,commentsnumbered,linesnumbered]{algorithm2e}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{exercise}{Exercise}[section]
+\newtheorem*{solution}{Solution}
+\theoremstyle{definition}
+
+
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+
+\newcommand{\postscript}[2]
+ {\setlength{\epsfxsize}{#2\hsize}
+  \centerline{\epsfbox{#1}}}
+
+\renewcommand{\baselinestretch}{1.0}
+
+\setlength{\oddsidemargin}{-0.365in}
+\setlength{\evensidemargin}{-0.365in}
+\setlength{\topmargin}{-0.3in}
+\setlength{\headheight}{0in}
+\setlength{\headsep}{0in}
+\setlength{\textheight}{10.1in}
+\setlength{\textwidth}{7in}
+\makeatletter \renewenvironment{proof}[1][Proof] {\par\pushQED{\qed}\normalfont\topsep6\p@\@plus6\p@\relax\trivlist\item[\hskip\labelsep\bfseries#1\@addpunct{.}]\ignorespaces}{\popQED\endtrivlist\@endpefalse} \makeatother
+\makeatletter
+\renewenvironment{solution}[1][Solution] {\par\pushQED{\qed}\normalfont\topsep6\p@\@plus6\p@\relax\trivlist\item[\hskip\labelsep\bfseries#1\@addpunct{.}]\ignorespaces}{\popQED\endtrivlist\@endpefalse} \makeatother
+
+
+%============================BEGIN OF THE DOCUMENT====================================
+\begin{document}
+\begin{spacing}{1.5}
+%==========================BEGIN OF THE TITLE===================================
+\begin{center}
+\begin{spacing}{3.0}
+\begin{tabular}{c c}
+\multicolumn{2}{c}{\Huge{Report for Project-1 \hspace{2cm}}} \\
+\hline
+\large{Author: Li Minchao} & \large {ID: 515030910361}\\
+\end{tabular}
+\end{spacing}
+\end{center}
+%==========================END OF THE TITLE=====================================
+%=========================BEGIN OF THE REPORT===================================
+%==================BEGIN OF SECTION 1======================================
+\section{Synopsis of the project}\par
+\subsection{Demand of the project}
+To achieve some bit-level function using C grammar.\par
+The limitation is to complete each function skeleton using only straightline code for the integer puzzles and a limited number of C arithmetic and logical operators.\par
+The operator set for each function is given, and the max op is anticipated.\par
+\subsection{Purpose of the project}
+To become more familiar with bit-level representations of integers and floating numbers.\par
+To work my own way through working it and make the algorithm as simple as possible.\par
+%===================END OF SECTION 1=======================================
+%==================BEGIN OF SECTION 2======================================
+\section{Environment of the project}
+OS:Linux Ubuntu Kylin 16.04\par
+Compile under gcc v5.4.0\par
+%===================END OF SECTION 2=======================================
+%==================BEGIN OF SECTION 3======================================
+\section{Implementation process of the project}
+I will illustrate how I managed to implement the function and conquer the barriers in this section.
+
+\subsection{bitAnd}
+\textbf{Introduction: }receive two arguments $\left(x, y\right)$, and return x $\&$ y using only $\sim$ and $\mid$\par
+\textbf{Solution: }\par
+Mainly use the De Morgan's law, $\overline{A \cup B} = \overline{A} \cap \overline{B}$.\par
+Thus, in this case, we have the equation, $\overline{\overline{A} \cup \overline{B}} = A \cap B$ to solve this problem.\par
+
+\subsection{getByte}
+\textbf{Introduction: }receive two arguments $\left(x, n\right)$, and return the extract byte n from word x.\par
+\textbf{Solution: }\par
+Since one byte has 8 bits, the shift amount (I name this para as movIndex in the function) should be 8 $\cdot$ n.\par
+Thus, we get the equation, $movIndex = n \ll 3$.\par
+And the answer is $\left(x \gg movIndex\right)\,\&\,\textrm{0xff}$.\par
+
+\subsection{logicalShift}
+\textbf{Introduction: }receive two arguments $\left(x, n\right)$, and shift x to the right by n, using a logical shift\par
+\textbf{Solution: }\par
+I declare a parament base = $1 \ll 31$ = 0x80000000.\par
+Since base is marked as signed integer, during the process of left shift, 1 is extended.\par
+By using $\sim\left(base \gg \left(n-1\right)\right)$, we get $00\cdots0\underbrace{11\cdots1}_{32-n\;1s}$, which serve as the mask.\par
+However, - operation is not allowed. To achieve this operation, we can implement $+\left(\sim 1 + 1\right)$.\par
+While in this case, if we directly use n + 0xffffffff, we will get unexpected case when n is 0.\par
+Since the low bit is always 0, we can left shift n, and right shift 1. So the mask is always what I expect.\par
+Taking the advantage of the mask, no matter whether the high bit is extended by 0 or 1, we can always have the right answer.\par
+
+\subsection{bitCount}
+\textbf{Introduction: }receive one argument x, and returns count of number of 1's in word.\par
+\textbf{Solution: }\par
+This is quite difficult for me, and probably the hardest one in this project.\par
+The ceiling of operation number is too limited, and I cannot make a simple solution.\par
+I bing-ed the relative solution, and there I found the solution based on divide and conquer methodology.\par
+I finally accomplish this function by the hint and I will explain how it works above.\par
+The core is that x saves the answer of partial bits in its corresponding part.\par
+First, we have this assignment, $x = \left(x\,\&\, 0x55555555\right) + \left(\left(x \gg 1\right)\,\&\, 0x55555555\right)$, which counts the number of 1's of some 2  consecutive bits.\par
+In the equation above, $x\,\&\,0x55555555$ and $\left(x \gg 1\right)\,\&\, 0x55555555$ represents the bits only in odd or even position.\par
+Take 0x1110 as an example, we add 0x0100 and 0x0101 (which is the result of $x\,\&\,0x55555555$ and $\left(x \gg 1\right)\,\&\, 0x55555555$), and get 0x1001 as the result, which 10 stands for 2, is the number of 1's in 11(the 2 and 3 bit) and 01 stands for 1, is the number of 1's in 10(the 1 and 0 bit).\par
+Every assignment in the function is to add two consecutive blocks which store answer of partial bits. The add operation is between either of 1-bit operands or 2-bit operands or 4-bit operands or 8-bit operands or 16-bit operands.\par
+We can view the initial x as one bit store the answer of 1's in one bit, and generally x use n bits to store the answer of 1's in n bits. Finally, we use 32 bits to store the answer of the 1's of the whole initial x.\par
+However, we cannot use those big int straightly.\par
+To overcome this, I declare 5 variables and got the value using $\ll$ and $\mid$.\par
+For example:\par
+mask1 = $\left(0x55 \ll 8\right)\,|\,0x55$;\par
+0x55555555 = $\left(mask1 \ll 16\right)\,|\,mask1$;\par
+
+\subsection{bang}
+\textbf{Introduction: }receive one argument x, and return !x without using !.\par
+\textbf{Solution: }\par
+If there is any 1 in any bit, we return 0.\par
+So, what I do is to calculate $b_0 \cup b_1 \cup \cdots \cup b_{31}$.\par
+First, I do this assignment $x = x \mid \left(x \gg 16\right)$, which record information of 32 bits into the low 16 bits.\par
+If there is any high bit in either low 16 bits or high 16 bits, the low 16 bits will have high bit.\par
+Likely, I do the similar assignments to condense information into less bits.\par
+Finally, all information is recorded in the $b_0$.\par
+Return 0, if $b_0$ is 1, and return 1, if $b_0$ is 0.\par
+
+\subsection{tmin}
+\textbf{Introduction: }receive no arguments, and return minimum two's complement integer.\par
+\textbf{Solution: }\par
+Just return $1 \ll 31$.\par
+
+\subsection{fitsBits}
+\textbf{Introduction: }receive two arguments $\left(x, n\right)$, and return 1 if x can be represented as an n-bit, two's complement integer.\par
+\textbf{Solution: }\par
+If I define the bit sequence is $\left(b_{31},b_{30},\cdots,b_1,b_0\right)$, the key of this function is to see if the $\left(b_{31},b_{30},\cdots,b_{n-1}\right)$ is the sequence made of same number.\par
+Since x is a signed integer, sign extended will be exerted when right shifted. So I left shift (n-1) bits, and if all bits are 0 or 1, return 1.\par
+Well, how can I implement n-1. One way is to add 0xffffffff, however, such integer is not allowed in this project. So, I use a trick to make 0xffffffff by implementing $\left(1 \ll 31\right) \gg 31$.\par
+To determine this, I just need to add $b_{n-1}$ to the number. If the result is 0, the function will return 1.\par
+
+\subsection{divpwr2}
+\textbf{Introduction: }receive two arguments $\left(x, n\right)$, and return $x/\left(2^{n}\right), for\;0 \leq n \leq 30$.\par
+\textbf{Solution: }\par
+In the case of $x \geq 0$, it is quite easy, we just need to left shift n.\par
+In the case of $x < 0$, it is complicated. We have to consider when and when not to add 1 to the result.\par
+Use $sgn = \left(x \gg 31\right)\;\&\;1$ to record the sign bit.\par
+If x can be divided by $2^{n}$, we don't have to add 1. I get the low bit of x by $x\,\&\left(\sim x + 1\right)$. And if we left shift low bit by n is not zero, it means x can be divided by $2^{n}$.\par
+We left shift the low bit by n bits, if the result is not zero, it means x can be divided by $2^{n}$.\par
+Use $sgn2 = !\left(lowbit \gg n\right)$ to mark this situation.\par
+Return $\left(x \gg n\right) + \left(sgn\;\&\;sgn2\right)$
+
+\subsection{negate}
+\textbf{Introduction: }receive one argument x, and return -x.\par
+\textbf{Solution: }\par
+According to the 2'compliment rule, simply return $\sim x + 1$.\par
+
+\subsection{isPositive}
+\textbf{Introduction: }receive one argument x, and return 1 if $x > 0$, otherwise, return 0.\par
+\textbf{Solution: }\par
+For a signed integer, the highest bit indicates if it's positive.\par
+If it's 1, it's negative, otherwise, it's positive.\par
+Use $sgn = \left(x \gg 31\right)\;\&\;1$ to record the bit.\par
+However, we should return 0, if x = 0.\par
+So, we should return $\left(!sgn\right)\;\&\; !\left(!x\right)$
+
+\subsection{isLessOrEqual}
+\textbf{Introduction: }receive two arguments $\left(x, y\right)$, and return 1 if $x \leq y$, otherwise, return 0.\par
+\textbf{Solution: }\par
+I notate the sign of x and y as x\underline{ }sgn and y\underline{ }sgn. I notate not\underline{ }equal = x\underline{ }sgn $\land$ y\underline{ }sgn.\par
+If x and y have different sign, not\underline{ }equal = 1. And the answer should be x\underline{ }sgn.\par
+If x and y have same sign, not\underline{ }equal = 0. And the answer should depend whether $y + \left(\sim x + 1\right) \geq 0$.\par
+So we only need to check whether the highest bit of $y + \left(\sim x + 1\right)$ is 0.\par
+Finally, use the structure of $\left(\textrm{not\underline{ }equal}\;\&\;\cdots\right) \mid \left(\textrm{!not\underline{ }equal}\;\&\;\cdots\right)$ to do the branch.\par
+
+\subsection{ilog2}
+\textbf{Introduction: }receive one argument x, and return floor(log base 2 of x), where $x > 0$.\par
+\textbf{Solution: }\par
+The key of this function is to return the highest index such that $b_{index} = 1$. Index ranges from 0 to 31.\par
+Since $x > 0$, 0 is extended if x is left shifted.\par
+If $x \gg 16 = 0$, it means we don't have 1 at the high 16 bits. Otherwise, the answer is at least 16 big. We use $sgn = !\left(!\left(x \gg 16\right)\right)$ to mark if we have 1 at high bits. And we use $cnt = sgn \ll 4$ to accumulate the answer.\par
+After these operation, we left shift x, $x = x \gg cnt$. If we don't have 1 at high bits, we then only focus on the low bits ranging from 0 to 15. If we have  1 at high bits, we then focus on the bits ranging from 16 to 31, and ignore the low bits, since we already know high bit is at 16 to 31.\par
+Do the similar operation, and change the constant from 16 to 8 and 4 and 2 and 1. And we can traverse the number bits.\par
+Finally we accumulate those cnt, and return the sum.\par
+
+\subsection{float\underline{ }neg}
+\textbf{Introduction: }receive one argument uf, and return bit-level equivalent of expression -f for floating point argument f. Both the argument and result are passed as unsigned int's, but they are to be interpreted as the bit-level representations of single-precision floating point values. When argument is NaN, return argument.\par
+\textbf{Solution: }\par
+Floating number is mainly divided into three parts: s, e, m.\par
+s, is the $b_{31}$, represents the sign of the number.\par
+e, ranges from $b_{23}\;to\;b_{30}$, represents the power of 2.\par
+m, ranges from $b_0\;to\;b_{22}$, represents the base.\par
+To get the s, e, m part, we can shift the number and \& the corresponding mask.\par
+If uf doesn't represent NAN, which means e part is 0xff and m part is not 0, simply return uf.\par
+If not, we simply change the sign bit.
+
+\subsection{float\underline{ }i2f}
+\textbf{Introduction: }receive one argument x, and return bit-level equivalent of expression (float) x. Result is returned as unsigned int, but it is to be interpreted as the bit-level representation of a single-precision floating point values.\par
+\textbf{Solution: }\par
+Do branch case if x is 0 or 0x80000000.\par
+Detect and save the sign of x, if x is negative, we assign $x = -x$.\par
+Then we should get the index of the highest bit of 1, the implement of which is similar with ilog2.\par
+If $index > 23$, we should also consider the deviation part which determines whether we take the floor or the ceiling to minimize the deviation. If the deviation is the same, we select the number which is even.\par
+The value of index also serve us to calculate e part. We just simply add index to the offset 127 and assign the result to e.\par
+Everything logical can be accomplished by branching. Finally using the mask skills to combine s, e, m part.\par
+However, I fail to accomplish this function within the max op.I cannot carry out any way to limit total operations into 30.\par
+
+\subsection{float\underline{ }twice}
+\textbf{Introduction: }receive one argument uf, and return bit-level equivalent of expression $2\cdot f$ for floating point argument f. Both the argument and result are passed as unsigned int's, but they are to be interpreted as the bit-level representation of single-precision floating point values. When argument is NaN, return argument.\par
+\textbf{Solution: }\par
+Regularly, I calculate the value of s, e, m part using shift operation and mask skill.\par
+If e part is zero, it means we cannot shift e part for e is always 0, and we should left shift the m by 1.\par
+Else if e part is 0xff, we just return uf. Since no matter it's infinite or NAN, uf itself is the answer of the function.\par
+Else, we simply add 1 to e part, and refresh e part to the initial uf.\par
+%===================END OF SECTION 3=======================================
+%==================BEGIN OF SECTION 4======================================
+\section{Review of the project}
+This project makes me to think about many details of those familiar operations and realize the implement or accomplishment of those seemingly regular functions is not that easy. Never will I know how it works until I try it myself, since these functions are already packaged. I can feel the efficiency of those standard implementation of the function compared with my naive way of implementation.\par
+Also, I come to know how the floating number is actually stored which is only a vague picture in my mind before. However, comprehension is one thing and practise is another. there are more things to be taken into consideration since the variable state of floating number and the existing deviation compared with integers.\par
+Finally, I appreciate it much for some online documents and blogs which solve many of my confusion.\par
+%===================END OF SECTION 4=======================================
+%==================BEGIN OF SECTION 5======================================
+\section{Reference}
+http://www.cnblogs.com/graphics/archive/2010/06/21/1752421.html\par
+https://wenku.baidu.com/view/f8fc95fad1f34693daef3e67.html\par
+http://blog.csdn.net/zhzhanp/article/details/6339883\par
+%===================END OF SECTION 5=======================================
+%==========================END OF THE REPORT====================================
+\end{spacing}
+\end{document}
+%============================END OF THE DOCUMENT======================================

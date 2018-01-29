@@ -1,0 +1,22 @@
+\BOOKMARK [1][-]{section.1}{Synopsis of the project}{}% 1
+\BOOKMARK [2][-]{subsection.1.1}{Demand of the project}{section.1}% 2
+\BOOKMARK [2][-]{subsection.1.2}{Purpose of the project}{section.1}% 3
+\BOOKMARK [1][-]{section.2}{Environment of the project}{}% 4
+\BOOKMARK [1][-]{section.3}{Implementation process of the project}{}% 5
+\BOOKMARK [2][-]{subsection.3.1}{bitAnd}{section.3}% 6
+\BOOKMARK [2][-]{subsection.3.2}{getByte}{section.3}% 7
+\BOOKMARK [2][-]{subsection.3.3}{logicalShift}{section.3}% 8
+\BOOKMARK [2][-]{subsection.3.4}{bitCount}{section.3}% 9
+\BOOKMARK [2][-]{subsection.3.5}{bang}{section.3}% 10
+\BOOKMARK [2][-]{subsection.3.6}{tmin}{section.3}% 11
+\BOOKMARK [2][-]{subsection.3.7}{fitsBits}{section.3}% 12
+\BOOKMARK [2][-]{subsection.3.8}{divpwr2}{section.3}% 13
+\BOOKMARK [2][-]{subsection.3.9}{negate}{section.3}% 14
+\BOOKMARK [2][-]{subsection.3.10}{isPositive}{section.3}% 15
+\BOOKMARK [2][-]{subsection.3.11}{isLessOrEqual}{section.3}% 16
+\BOOKMARK [2][-]{subsection.3.12}{ilog2}{section.3}% 17
+\BOOKMARK [2][-]{subsection.3.13}{float neg}{section.3}% 18
+\BOOKMARK [2][-]{subsection.3.14}{float i2f}{section.3}% 19
+\BOOKMARK [2][-]{subsection.3.15}{float twice}{section.3}% 20
+\BOOKMARK [1][-]{section.4}{Review of the project}{}% 21
+\BOOKMARK [1][-]{section.5}{Reference}{}% 22
