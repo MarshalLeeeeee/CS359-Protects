@@ -1,2 +1,2 @@
 # CS359-Protects
-Projects of CS359 Spring 2017
+Projects of CS359 Computer Architecture Spring 2017
